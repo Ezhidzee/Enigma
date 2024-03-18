@@ -41,10 +41,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/enigma/registration").permitAll()
                         .requestMatchers("/enigma/authentication").permitAll()
-//                        .requestMatchers("/medApp/doctors/registration").permitAll()
-//                        .requestMatchers("/medApp/doctors/authentication").permitAll()
-//                        .requestMatchers("/medApp/patients/registration").permitAll()
-//                        .requestMatchers("/medApp/patients/authentication").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
