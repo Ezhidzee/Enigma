@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,7 +29,6 @@ public class ChatController {
     private ChatService chatService;
 
     @MessageMapping("/private-chat")
-    @SendToUser("/topic/private-messages")
     public InputMessageModel getPrivateMessage(final InputMessageModel message, final Principal principal) throws Exception {
         Validator.validate(message);
         service.sendMessage(message);
@@ -55,8 +53,8 @@ public class ChatController {
         }
     }
 
-    @GetMapping(path = "/chats", params = {"id"})
-    public ResponseEntity getChats(@RequestParam Integer id) {
+    @GetMapping(path = "/chat", params = {"id"})
+    public ResponseEntity getChat(@RequestParam Integer id) {
         try {
             return ResponseEntity.ok(new ChatModel(chatService.getChatById(id)));
         } catch (RecordNotFoundException e) {
@@ -92,6 +90,17 @@ public class ChatController {
     public ResponseEntity deleteMessage(@RequestParam Integer chatId, @RequestParam Integer messageId) {
         try {
             return ResponseEntity.ok(chatService.deleteMessage(chatId, messageId));
+        } catch (RecordNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ExceptionBodyBuilder.build(HttpStatus.NOT_FOUND.value(), e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ExceptionBodyBuilder.build(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
+        }
+    }
+
+    @PostMapping(path = "/setAgp", params = {"id", "A", "g", "p"})
+    public ResponseEntity deleteMessage(@RequestParam Integer id, @RequestParam Integer A, @RequestParam Integer g, @RequestParam Integer p) {
+        try {
+            return ResponseEntity.ok(chatService.setAgp(id, A, g, p));
         } catch (RecordNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ExceptionBodyBuilder.build(HttpStatus.NOT_FOUND.value(), e.getMessage()));
         } catch (Exception e) {

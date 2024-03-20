@@ -2,6 +2,7 @@ package su.ezhidze.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 import su.ezhidze.entity.*;
 import su.ezhidze.exception.RecordNotFoundException;
 import su.ezhidze.model.ChatModel;
@@ -71,6 +72,24 @@ public class ChatService {
         Message message = messageRepository.findById(messageId).orElseThrow(() -> new RecordNotFoundException("Message not found"));
 
         chat.getMessages().remove(message);
+
+        return new ChatModel(chatRepository.save(chat));
+    }
+
+    public ChatModel setAgp(Integer chatId, Integer A, Integer g, Integer p) {
+        Chat chat = chatRepository.findById(chatId).orElseThrow(() -> new RecordNotFoundException("Chat not found"));
+
+        chat.setA(A);
+        chat.setG(g);
+        chat.setP(p);
+
+        return new ChatModel(chatRepository.save(chat));
+    }
+
+    public ChatModel setB(Integer chatId, Integer B) {
+        Chat chat = chatRepository.findById(chatId).orElseThrow(() -> new RecordNotFoundException("Chat not found"));
+
+        chat.setB(B);
 
         return new ChatModel(chatRepository.save(chat));
     }

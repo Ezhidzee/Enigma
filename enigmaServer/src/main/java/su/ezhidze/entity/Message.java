@@ -21,7 +21,7 @@ public class Message {
 
     public Message(final InputMessageModel inputMessageModel, ChatService chatService) {
         chat = chatService.getChatById(inputMessageModel.getChatId());
-        messageText = inputMessageModel.getMessageText();
+        messageText = inputMessageModel.getData();
     }
 
     public Message() {

@@ -1,20 +1,29 @@
-package su.ezhidze;
+package su.ezhidze.models;
+
 
 public class InputMessageModel {
+
+    private String type;
 
     private String senderSubject;
 
     private Integer chatId;
 
-    private String messageText;
+    private String data;
 
-    public InputMessageModel(String senderSubject, Integer chatId, String messageText) {
+    public InputMessageModel(String type, String senderSubject, Integer chatId, String data) {
+        this.type = type;
         this.senderSubject = senderSubject;
         this.chatId = chatId;
-        this.messageText = messageText;
+        this.data = data;
     }
 
-    public InputMessageModel() {
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getSenderSubject() {
@@ -33,11 +42,11 @@ public class InputMessageModel {
         this.chatId = chatId;
     }
 
-    public String getMessageText() {
-        return messageText;
+    public String getData() {
+        return data;
     }
 
-    public void setMessageText(String messageText) {
-        this.messageText = messageText;
+    public void setData(String data) {
+        this.data = data;
     }
 }
