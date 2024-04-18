@@ -26,6 +26,9 @@ public class User {
 
     private Boolean isOnline;
 
+    @Column(columnDefinition = "TEXT")
+    private String publicKey;
+
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Chat> chats;
 

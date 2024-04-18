@@ -13,4 +13,7 @@ public class AuthenticationModel {
 
     @NotNull(message = "Password cannot be null")
     private String password;
+
+    @NotNull(message = "PublicKey cannot be null")
+    private String publicKey;
 }

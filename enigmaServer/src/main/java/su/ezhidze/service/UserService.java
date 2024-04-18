@@ -79,12 +79,18 @@ public class UserService implements UserDetailsService {
             user.setPhoneNumber((String) fields.get("phoneNumber"));
         }
         if (fields.get("password") != null) user.setPassword((String) fields.get("password"));
-
+        userRepository.save(user);
         return user;
     }
 
     public User patchUser(Integer id, Map<String, Object> fields) {
         User user = getUserById(id);
         return patchUser(user, fields);
+    }
+
+    public void setPublicKey(String nickname, String publicKey) {
+        User user = userRepository.findByNickname(nickname).orElseThrow(() -> new AuthenticationFailException("User not found"));
+        user.setPublicKey(publicKey);
+        userRepository.save(user);
     }
 }

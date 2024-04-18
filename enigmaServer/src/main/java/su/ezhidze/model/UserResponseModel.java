@@ -16,16 +16,20 @@ public class UserResponseModel {
 
     private String phoneNumber;
 
+    private String publicKey;
+
     public UserResponseModel(final User user) {
         id = user.getId();
         nickname = user.getNickname();
         phoneNumber = user.getPhoneNumber();
+        publicKey = user.getPublicKey();
     }
 
     public Map<String, Object> toMap() {
         return Map.of(
                 "id", id.toString(),
                 "nickname", nickname,
-                "phoneNumber", phoneNumber);
+                "phoneNumber", phoneNumber,
+                "publicKey", publicKey);
     }
 }
