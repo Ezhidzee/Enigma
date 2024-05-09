@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.messaging.support.GenericMessage;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
@@ -13,7 +14,11 @@ import su.ezhidze.entity.User;
 import su.ezhidze.exception.RecordNotFoundException;
 import su.ezhidze.repository.UserRepository;
 import su.ezhidze.service.UserService;
+import su.ezhidze.service.WSService;
 import su.ezhidze.util.JwtUtil;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 @Component
 @Slf4j
@@ -41,7 +46,7 @@ public class WebSocketEventListener {
     public void handleWebSocketConnectListener(SessionConnectEvent event) {
         JwtUtil jwtUtil = new JwtUtil();
         String userUuid = event.getUser().getName();
-        String bearerToken = UserHandshakeHandler.lastHttpHeaders.get("Authorization").get(0);
+        String bearerToken = ((ArrayList<String>)((Map)((GenericMessage) event.getMessage()).getHeaders().get("nativeHeaders")).get("Authorization")).get(0);
         String tokenPrefix = "Bearer ";
         String jwtToken = null;
         if (bearerToken != null && bearerToken.startsWith(tokenPrefix)) {
