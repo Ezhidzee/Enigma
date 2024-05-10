@@ -6,10 +6,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import su.ezhidze.entity.Chat;
 import su.ezhidze.entity.User;
 import su.ezhidze.exception.AuthenticationFailException;
 import su.ezhidze.exception.DuplicateEntryException;
 import su.ezhidze.exception.RecordNotFoundException;
+import su.ezhidze.model.ChatModel;
 import su.ezhidze.model.UserRegistrationModel;
 import su.ezhidze.model.UserResponseModel;
 import su.ezhidze.repository.UserRepository;
@@ -92,5 +94,10 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findByNickname(nickname).orElseThrow(() -> new AuthenticationFailException("User not found"));
         user.setPublicKey(publicKey);
         userRepository.save(user);
+    }
+
+    public ArrayList<ChatModel> getUserChats(Integer userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RecordNotFoundException("User not found"));
+        return new ArrayList<>(user.getChats().stream().map(ChatModel::new).toList());
     }
 }
