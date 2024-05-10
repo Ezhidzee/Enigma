@@ -1,5 +1,6 @@
 package su.ezhidze.controller;
 
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +19,6 @@ import su.ezhidze.service.ChatService;
 import su.ezhidze.service.WSService;
 import su.ezhidze.validator.Validator;
 
-import java.security.Principal;
-
 @Controller
 public class ChatController {
 
@@ -31,9 +30,12 @@ public class ChatController {
 
     @MessageMapping("/private-chat")
     @SendToUser("/topic/private-messages")
-    public InputMessageModel getPrivateMessage(final InputMessageModel message, final Principal principal) throws Exception {
+    public String getPrivateMessage(String message) throws Exception {
+        Gson gson = new Gson();
+
         Validator.validate(message);
-        service.sendMessage(message);
+        InputMessageModel inputMessage = gson.fromJson(message, InputMessageModel.class);
+        service.sendMessage(inputMessage);
         return message;
     }
 
