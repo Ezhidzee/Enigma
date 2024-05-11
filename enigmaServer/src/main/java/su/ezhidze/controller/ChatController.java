@@ -1,6 +1,7 @@
 package su.ezhidze.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,22 +12,29 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import su.ezhidze.entity.User;
 import su.ezhidze.exception.ExceptionBodyBuilder;
 import su.ezhidze.exception.RecordNotFoundException;
 import su.ezhidze.model.ChatModel;
 import su.ezhidze.model.InputMessageModel;
 import su.ezhidze.service.ChatService;
+import su.ezhidze.service.UserService;
 import su.ezhidze.service.WSService;
 import su.ezhidze.validator.Validator;
+
+import java.util.List;
 
 @Controller
 public class ChatController {
 
     @Autowired
-    private WSService service;
+    private WSService wsService;
 
     @Autowired
     private ChatService chatService;
+
+    @Autowired
+    private UserService userService;
 
     @MessageMapping("/private-chat")
     @SendToUser("/topic/private-messages")
@@ -35,8 +43,16 @@ public class ChatController {
 
         Validator.validate(message);
         InputMessageModel inputMessage = gson.fromJson(message, InputMessageModel.class);
-        service.sendMessage(inputMessage);
+        wsService.sendMessage(inputMessage);
         return message;
+    }
+
+    @MessageMapping("/connection-notifications")
+    @SendToUser("/topic/private-notifications")
+    public void getConnectionNotifications(String notification) {
+        User user = userService.loadUserByNickname(notification.split(" ")[0]);
+        Gson gson = new Gson();
+        wsService.sendNotificationResponse(gson.toJson(user.getUnreadMessages().stream().map(InputMessageModel::new).toList(), new TypeToken<List<InputMessageModel>>() {}.getType()), user.getUUID());
     }
 
     @PostMapping(path = "/addChat")

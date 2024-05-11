@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import su.ezhidze.entity.InputMessage;
 
 @Getter
 @Setter
@@ -25,5 +26,11 @@ public class InputMessageModel {
         this.senderSubject = senderSubject;
         this.chatId = chatId;
         this.messageText = messageText;
+    }
+
+    public InputMessageModel(InputMessage inputMessage) {
+        senderSubject = inputMessage.getSenderSubject();
+        chatId = inputMessage.getChatId();
+        messageText = inputMessage.getMessageText();
     }
 }

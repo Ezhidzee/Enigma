@@ -93,4 +93,8 @@ public class UserService implements UserDetailsService {
         user.setPublicKey(publicKey);
         userRepository.save(user);
     }
+
+    public void saveUser(User user) {
+        userRepository.save(user);
+    }
 }

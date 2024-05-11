@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import su.ezhidze.entity.Chat;
+import su.ezhidze.entity.InputMessage;
 import su.ezhidze.entity.User;
 import su.ezhidze.model.InputMessageModel;
 
@@ -21,6 +22,9 @@ public class WSService {
     private MessageService messageService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     public WSService(SimpMessagingTemplate messagingTemplate) {
         this.messagingTemplate = messagingTemplate;
     }
@@ -30,9 +34,16 @@ public class WSService {
         for (User user : chat.getUsers()) {
             if (user.getIsOnline() && !Objects.equals(user.getNickname(), message.getSenderSubject())) {
                 messagingTemplate.convertAndSendToUser(user.getUUID(), "/topic/private-messages", message);
+            } else if (!Objects.equals(user.getNickname(), message.getSenderSubject())) {
+                user.getUnreadMessages().add(new InputMessage(message));
+                userService.saveUser(user);
             }
         }
         Integer newMessageId = messageService.addNewMessage(message, chatService).getId();
         chatService.addMessage(chat.getId(), messageService.getMessageById(newMessageId));
+    }
+
+    public void sendNotificationResponse(String response, String uuid) {
+        messagingTemplate.convertAndSendToUser(uuid, "/topic/private-notifications", response);
     }
 }
