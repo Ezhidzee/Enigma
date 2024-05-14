@@ -51,6 +51,7 @@ public class ChatController {
         if (!user.getUnreadMessages().isEmpty()) {
             Gson gson = new Gson();
             wsService.sendNotificationResponse(gson.toJson(user.getUnreadMessages().stream().map(InputMessageModel::new).toList(), new TypeToken<List<InputMessageModel>>() {}.getType()), user.getUUID());
+            userService.clearUnreadMessages(user.getId());
         }
     }
 

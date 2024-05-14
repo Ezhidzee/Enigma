@@ -18,6 +18,7 @@ import su.ezhidze.validator.Validator;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -28,6 +29,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private InputMessageService inputMessageService;
 
     public UserResponseModel addNewUser(final UserRegistrationModel userRegistrationModel) {
         if (userRepository.findByNickname(userRegistrationModel.getNickname()).isPresent()) {
@@ -98,6 +102,12 @@ public class UserService implements UserDetailsService {
     public void addUnreadMessage(Integer id, InputMessage message) {
         User user = getUserById(id);
         user.getUnreadMessages().add(message);
+        userRepository.save(user);
+    }
+
+    public void clearUnreadMessages(Integer id) {
+        User user = getUserById(id);
+        user.getUnreadMessages().clear();
         userRepository.save(user);
     }
 }
