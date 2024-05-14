@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import su.ezhidze.entity.InputMessage;
 import su.ezhidze.entity.User;
 import su.ezhidze.exception.AuthenticationFailException;
 import su.ezhidze.exception.DuplicateEntryException;
@@ -94,7 +95,9 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
-    public void saveUser(User user) {
+    public void addUnreadMessage(Integer id, InputMessage message) {
+        User user = getUserById(id);
+        user.getUnreadMessages().add(message);
         userRepository.save(user);
     }
 }

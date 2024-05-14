@@ -25,6 +25,9 @@ public class WSService {
     private UserService userService;
 
     @Autowired
+    private InputMessageService inputMessageService;
+
+    @Autowired
     public WSService(SimpMessagingTemplate messagingTemplate) {
         this.messagingTemplate = messagingTemplate;
     }
@@ -35,8 +38,7 @@ public class WSService {
             if (user.getIsOnline() && !Objects.equals(user.getNickname(), message.getSenderSubject())) {
                 messagingTemplate.convertAndSendToUser(user.getUUID(), "/topic/private-messages", message);
             } else if (!Objects.equals(user.getNickname(), message.getSenderSubject())) {
-                user.getUnreadMessages().add(new InputMessage(message));
-                userService.saveUser(user);
+                userService.addUnreadMessage(user.getId(), inputMessageService.addInputMessage(message));
             }
         }
         Integer newMessageId = messageService.addNewMessage(message, chatService).getId();
