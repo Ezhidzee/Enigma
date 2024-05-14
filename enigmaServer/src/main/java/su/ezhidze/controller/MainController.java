@@ -53,11 +53,11 @@ public class MainController {
             Authentication authenticate =
                     authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationModel.getNickname(), authenticationModel.getPassword()));
             String token = jwtUtil.createToken(userService.loadUserByNickname(authenticationModel.getNickname()));
-            Map<String, Object> response = new java.util.HashMap<>(Map.of("token:", token));
             userService.setPublicKey(authenticationModel.getNickname(), authenticationModel.getPublicKey());
             UserResponseModel t = new UserResponseModel(userService.loadUserByNickname(authenticationModel.getNickname()));
-            response.putAll((t).toMap());
-            return ResponseEntity.ok(response);
+            AuthenticationResponseModel responseModel = new AuthenticationResponseModel(t);
+            responseModel.setToken(token);
+            return ResponseEntity.ok(responseModel);
         } catch (BadArgumentException e) {
             return ResponseEntity.internalServerError().body(ExceptionBodyBuilder.build(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
         } catch (Exception e) {

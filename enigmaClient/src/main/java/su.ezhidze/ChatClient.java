@@ -18,7 +18,6 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class ChatClient {
     public static void main(String args[]) throws Exception {
@@ -51,7 +50,7 @@ public class ChatClient {
             msg.setChatId(chatID);
             msg.setSenderSubject(email);
             msg.setMessageText(line);
-            session.send("/app/private-chat", msg);
+            session.send("/app/private-chat", "testMessage");
         }
     }
 

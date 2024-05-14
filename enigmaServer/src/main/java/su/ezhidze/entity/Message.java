@@ -19,9 +19,12 @@ public class Message {
 
     private String messageText;
 
+    private String senderSubject;
+
     public Message(final InputMessageModel inputMessageModel, ChatService chatService) {
         chat = chatService.getChatById(inputMessageModel.getChatId());
         messageText = inputMessageModel.getMessageText();
+        senderSubject = inputMessageModel.getSenderSubject();
     }
 
     public Message() {

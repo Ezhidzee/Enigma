@@ -38,21 +38,20 @@ public class ChatController {
 
     @MessageMapping("/private-chat")
     @SendToUser("/topic/private-messages")
-    public String getPrivateMessage(String message) throws Exception {
+    public void getPrivateMessage(String message) throws Exception {
         Gson gson = new Gson();
-
-        Validator.validate(message);
         InputMessageModel inputMessage = gson.fromJson(message, InputMessageModel.class);
         wsService.sendMessage(inputMessage);
-        return message;
     }
 
     @MessageMapping("/connection-notifications")
     @SendToUser("/topic/private-notifications")
     public void getConnectionNotifications(String notification) {
         User user = userService.loadUserByNickname(notification.split(" ")[0]);
-        Gson gson = new Gson();
-        wsService.sendNotificationResponse(gson.toJson(user.getUnreadMessages().stream().map(InputMessageModel::new).toList(), new TypeToken<List<InputMessageModel>>() {}.getType()), user.getUUID());
+        if (!user.getUnreadMessages().isEmpty()) {
+            Gson gson = new Gson();
+            wsService.sendNotificationResponse(gson.toJson(user.getUnreadMessages().stream().map(InputMessageModel::new).toList(), new TypeToken<List<InputMessageModel>>() {}.getType()), user.getUUID());
+        }
     }
 
     @PostMapping(path = "/addChat")

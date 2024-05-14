@@ -14,9 +14,12 @@ public class MessageResponseModel {
 
     private String messageText;
 
+    private String senderSubject;
+
     public MessageResponseModel(final Message message) {
         id = message.getId();
         chatId = message.getChat().getId();
         messageText = message.getMessageText();
+        senderSubject = message.getSenderSubject();
     }
 }
