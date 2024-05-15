@@ -32,7 +32,7 @@ public class User {
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Chat> chats;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, orphanRemoval=true)
     private List<InputMessage> unreadMessages;
 
     public User() {

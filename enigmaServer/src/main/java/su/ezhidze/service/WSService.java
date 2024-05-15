@@ -38,7 +38,7 @@ public class WSService {
             if (user.getIsOnline() && !Objects.equals(user.getNickname(), message.getSenderSubject())) {
                 messagingTemplate.convertAndSendToUser(user.getUUID(), "/topic/private-messages", message);
             } else if (!Objects.equals(user.getNickname(), message.getSenderSubject())) {
-                userService.addUnreadMessage(user.getId(), inputMessageService.addInputMessage(message));
+                userService.addUnreadMessage(user.getId(), inputMessageService.addInputMessage(message, user));
             }
         }
         Integer newMessageId = messageService.addNewMessage(message, chatService).getId();

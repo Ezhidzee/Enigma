@@ -18,7 +18,6 @@ import su.ezhidze.validator.Validator;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -109,5 +108,6 @@ public class UserService implements UserDetailsService {
         User user = getUserById(id);
         user.getUnreadMessages().clear();
         userRepository.save(user);
+        inputMessageService.deleteInputMessages(user);
     }
 }

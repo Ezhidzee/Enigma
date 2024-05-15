@@ -1,9 +1,6 @@
 package su.ezhidze.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import su.ezhidze.model.InputMessageModel;
@@ -23,6 +20,9 @@ public class InputMessage {
 
     private String messageText;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    private User user;
+
     public InputMessage() {
     }
 
@@ -32,9 +32,10 @@ public class InputMessage {
         this.messageText = messageText;
     }
 
-    public InputMessage(final InputMessageModel inputMessage) {
+    public InputMessage(final InputMessageModel inputMessage, User user) {
         senderSubject = inputMessage.getSenderSubject();
         chatId = inputMessage.getChatId();
         messageText = inputMessage.getMessageText();
+        this.user = user;
     }
 }
