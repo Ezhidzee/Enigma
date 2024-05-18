@@ -26,6 +26,6 @@ public class InputMessageService {
 
     public void deleteInputMessages(User user) {
         List<InputMessage> messages = inputMessageRepository.findInputMessageByUser(user).orElseThrow(() -> new AuthenticationFailException("InputMessages not found"));
-        messages.stream().forEach(inputMessage -> inputMessageRepository.delete(inputMessage));
+        inputMessageRepository.deleteAll(messages);
     }
 }
