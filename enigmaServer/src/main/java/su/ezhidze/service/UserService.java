@@ -11,6 +11,7 @@ import su.ezhidze.entity.User;
 import su.ezhidze.exception.AuthenticationFailException;
 import su.ezhidze.exception.DuplicateEntryException;
 import su.ezhidze.exception.RecordNotFoundException;
+import su.ezhidze.model.ChatModel;
 import su.ezhidze.model.UserRegistrationModel;
 import su.ezhidze.model.UserResponseModel;
 import su.ezhidze.repository.UserRepository;
@@ -109,5 +110,10 @@ public class UserService implements UserDetailsService {
         user.getUnreadMessages().clear();
         userRepository.save(user);
         inputMessageService.deleteInputMessages(user);
+    }
+
+    public ArrayList<ChatModel> getUserChats(Integer userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RecordNotFoundException("User not found"));
+        return new ArrayList<>(user.getChats().stream().map(ChatModel::new).toList());
     }
 }

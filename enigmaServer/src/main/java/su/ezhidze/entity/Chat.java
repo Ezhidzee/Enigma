@@ -18,7 +18,7 @@ public class Chat {
     @ManyToMany(fetch = FetchType.EAGER)
     private List<User> users;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, orphanRemoval=true)
     private List<Message> messages;
 
     public Chat() {

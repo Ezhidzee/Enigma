@@ -48,4 +48,8 @@ public class WSService {
     public void sendNotificationResponse(String response, String uuid) {
         messagingTemplate.convertAndSendToUser(uuid, "/topic/private-notifications", response);
     }
+
+    public void sendChatRemovalNotification(Integer chatId, String uuid) {
+        messagingTemplate.convertAndSendToUser(uuid, "/topic/chat-removal-notifications", chatId);
+    }
 }

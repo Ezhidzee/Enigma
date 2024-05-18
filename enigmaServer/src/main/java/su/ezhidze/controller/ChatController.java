@@ -8,10 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import su.ezhidze.entity.User;
 import su.ezhidze.exception.ExceptionBodyBuilder;
 import su.ezhidze.exception.RecordNotFoundException;
@@ -20,7 +17,6 @@ import su.ezhidze.model.InputMessageModel;
 import su.ezhidze.service.ChatService;
 import su.ezhidze.service.UserService;
 import su.ezhidze.service.WSService;
-import su.ezhidze.validator.Validator;
 
 import java.util.List;
 
@@ -110,6 +106,23 @@ public class ChatController {
     public ResponseEntity deleteMessage(@RequestParam Integer chatId, @RequestParam Integer messageId) {
         try {
             return ResponseEntity.ok(chatService.deleteMessage(chatId, messageId));
+        } catch (RecordNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ExceptionBodyBuilder.build(HttpStatus.NOT_FOUND.value(), e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ExceptionBodyBuilder.build(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
+        }
+    }
+
+    @DeleteMapping("/deleteChat")
+    public ResponseEntity deleteChat(@RequestParam Integer id) {
+        try {
+            List<User> users = chatService.deleteChat(id);
+            for (User user : users) {
+                if (user.getIsOnline()) {
+                    wsService.sendChatRemovalNotification(id, user.getUUID());
+                }
+            }
+            return ResponseEntity.ok("");
         } catch (RecordNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ExceptionBodyBuilder.build(HttpStatus.NOT_FOUND.value(), e.getMessage()));
         } catch (Exception e) {

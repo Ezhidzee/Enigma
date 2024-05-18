@@ -109,4 +109,15 @@ public class MainController {
             return ResponseEntity.badRequest().body(ExceptionBodyBuilder.build(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
         }
     }
+
+    @GetMapping(path = "/getUserChats", params = {"userId"})
+    public ResponseEntity getUserChats(@RequestParam Integer userId) {
+        try {
+            return ResponseEntity.ok(userService.getUserChats(userId));
+        } catch (RecordNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ExceptionBodyBuilder.build(HttpStatus.NOT_FOUND.value(), e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ExceptionBodyBuilder.build(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
+        }
+    }
 }

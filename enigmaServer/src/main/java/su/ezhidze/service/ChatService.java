@@ -11,6 +11,8 @@ import su.ezhidze.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ChatService {
@@ -38,7 +40,7 @@ public class ChatService {
 
     public ChatModel joinUser(Integer chatId, Integer userId) {
         Chat chat = chatRepository.findById(chatId).orElseThrow(() -> new RecordNotFoundException("Chat not found"));
-        User user = userRepository.findById(userId).orElseThrow(() -> new RecordNotFoundException("Doctor not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new RecordNotFoundException("User not found"));
 
         user.getChats().add(chat);
         userRepository.save(user);
@@ -50,7 +52,7 @@ public class ChatService {
 
     public ChatModel deleteUser(Integer chatId, Integer userId) {
         Chat chat = chatRepository.findById(chatId).orElseThrow(() -> new RecordNotFoundException("Chat not found"));
-        User user = userRepository.findById(userId).orElseThrow(() -> new RecordNotFoundException("Doctor not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new RecordNotFoundException("User not found"));
 
         chat.getUsers().remove(user);
 
@@ -73,5 +75,26 @@ public class ChatService {
         chat.getMessages().remove(message);
 
         return new ChatModel(chatRepository.save(chat));
+    }
+
+    public List<User> deleteChat(Integer id) {
+        Chat chat = getChatById(id);
+        List<User> users = chat.getUsers();
+        for (User user : users) {
+            for (int i = 0; i < user.getChats().size(); i++) {
+                if (Objects.equals(user.getChats().get(i).getId(), id)) {
+                    user.getChats().remove(i);
+                    break;
+                }
+            }
+            userRepository.save(user);
+        }
+        chat.getMessages().clear();
+        chatRepository.save(chat);
+        List<Message> messages = messageRepository.findMessagesByChat(chat).orElseThrow(() -> new RecordNotFoundException("Messages not found"));
+        messageRepository.deleteAll(messages);
+
+        chatRepository.delete(chat);
+        return users;
     }
 }
