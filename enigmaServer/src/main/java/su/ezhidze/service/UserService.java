@@ -116,4 +116,10 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findById(userId).orElseThrow(() -> new RecordNotFoundException("User not found"));
         return new ArrayList<>(user.getChats().stream().map(ChatModel::new).toList());
     }
+
+    public User signOut(Integer id) {
+        User user = getUserById(id);
+        user.setPublicKey(null);
+        return userRepository.save(user);
+    }
 }

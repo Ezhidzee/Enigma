@@ -120,4 +120,15 @@ public class MainController {
             return ResponseEntity.badRequest().body(ExceptionBodyBuilder.build(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
         }
     }
+
+    @PostMapping(path = "/signOutUser", params = {"id"})
+    public ResponseEntity signOutUser(@RequestParam Integer id) {
+        try {
+            return ResponseEntity.ok(new UserResponseModel(userService.signOut(id)));
+        } catch (RecordNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ExceptionBodyBuilder.build(HttpStatus.NOT_FOUND.value(), e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ExceptionBodyBuilder.build(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
+        }
+    }
 }

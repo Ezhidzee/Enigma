@@ -129,4 +129,25 @@ public class ChatController {
             return ResponseEntity.badRequest().body(ExceptionBodyBuilder.build(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
         }
     }
+
+    @DeleteMapping("/deleteUserChats")
+    public ResponseEntity deleteUserChats(@RequestParam Integer id) {
+        try {
+            User user = userService.getUserById(id);
+            while (!user.getChats().isEmpty()) {
+                int chatId = user.getChats().get(0).getId();
+                List<User> users = chatService.deleteChat(chatId);
+                for (User u : users) {
+                    if (u.getIsOnline() && !u.getId().equals(user.getId())) {
+                        wsService.sendChatRemovalNotification(chatId, u.getUUID());
+                    }
+                }
+            }
+            return ResponseEntity.ok("");
+        } catch (RecordNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ExceptionBodyBuilder.build(HttpStatus.NOT_FOUND.value(), e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ExceptionBodyBuilder.build(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
+        }
+    }
 }
