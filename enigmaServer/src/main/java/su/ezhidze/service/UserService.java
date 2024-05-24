@@ -58,7 +58,7 @@ public class UserService implements UserDetailsService {
     }
 
     public ArrayList<UserResponseModel> getUsers() {
-        return new ArrayList<>(((Collection<User>) userRepository.findAll()).stream().map(UserResponseModel::new).toList());
+        return new ArrayList<>(((Collection<User>) userRepository.findAll()).stream().filter(user -> user.getPublicKey() != null).map(UserResponseModel::new).toList());
     }
 
     public User getUserById(Integer id) {
