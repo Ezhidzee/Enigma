@@ -17,6 +17,7 @@ public class Message {
     @ManyToOne(fetch = FetchType.EAGER)
     private Chat chat;
 
+    @Column(length = 10000)
     private String messageText;
 
     private String senderSubject;

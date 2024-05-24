@@ -18,6 +18,7 @@ public class InputMessage {
 
     private Integer chatId;
 
+    @Column(length = 10000)
     private String messageText;
 
     @ManyToOne(fetch = FetchType.EAGER)
