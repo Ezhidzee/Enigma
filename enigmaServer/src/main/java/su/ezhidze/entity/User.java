@@ -20,6 +20,9 @@ public class User {
 
     private String phoneNumber;
 
+    @Column(length = 100000)
+    private String image;
+
     private String password;
 
     private String UUID;
@@ -43,6 +46,7 @@ public class User {
         id = user.getId();
         nickname = user.getNickname();
         phoneNumber = user.getPhoneNumber();
+        image = user.getImage();
         password = user.getPassword();
         UUID = user.getUUID();
         isOnline = user.getIsOnline();
@@ -52,6 +56,7 @@ public class User {
     public User(final UserRegistrationModel userRegistrationModel) {
         nickname = userRegistrationModel.getNickname();
         phoneNumber = userRegistrationModel.getPhoneNumber();
+        image = userRegistrationModel.getImage();
         password = userRegistrationModel.getPassword();
         isOnline = false;
     }

@@ -20,6 +20,9 @@ public class UserRegistrationModel {
     @Size(max = 100, message = "phoneNumber length should not be greater than 100 symbols")
     private String phoneNumber;
 
+    @NotNull(message = "image cannot be null")
+    private String image;
+
     @NotNull(message = "password cannot be null")
     @Pattern(regexp = "(?=.*[0-9]).+", message = "A digit must occur at least once in password")
     @Pattern(regexp = "(?=.*[a-z]).+", message = "A lower case letter must occur at least once in password")
