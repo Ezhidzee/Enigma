@@ -122,4 +122,10 @@ public class UserService implements UserDetailsService {
         user.setPublicKey(null);
         return userRepository.save(user);
     }
+
+    public User setImage(Integer id, String image) {
+        User user = getUserById(id);
+        user.setImage(image);
+        return userRepository.save(user);
+    }
 }

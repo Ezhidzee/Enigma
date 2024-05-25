@@ -14,6 +14,7 @@ import su.ezhidze.exception.ExceptionBodyBuilder;
 import su.ezhidze.exception.RecordNotFoundException;
 import su.ezhidze.model.*;
 import su.ezhidze.service.UserService;
+import su.ezhidze.service.WSService;
 import su.ezhidze.util.JwtUtil;
 import su.ezhidze.validator.Validator;
 
@@ -29,6 +30,9 @@ public class MainController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private WSService wsService;
 
     public MainController(AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
         this.authenticationManager = authenticationManager;
@@ -125,6 +129,17 @@ public class MainController {
     public ResponseEntity signOutUser(@RequestParam Integer id) {
         try {
             return ResponseEntity.ok(new UserResponseModel(userService.signOut(id)));
+        } catch (RecordNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ExceptionBodyBuilder.build(HttpStatus.NOT_FOUND.value(), e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ExceptionBodyBuilder.build(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
+        }
+    }
+
+    @PatchMapping(path = "/setImage")
+    public ResponseEntity setImage(@RequestParam Integer id, @RequestParam String image) {
+        try {
+            return ResponseEntity.ok(new UserResponseModel(userService.setImage(id, image)));
         } catch (RecordNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ExceptionBodyBuilder.build(HttpStatus.NOT_FOUND.value(), e.getMessage()));
         } catch (Exception e) {

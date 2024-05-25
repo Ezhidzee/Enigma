@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import su.ezhidze.entity.Chat;
-import su.ezhidze.entity.InputMessage;
 import su.ezhidze.entity.User;
 import su.ezhidze.model.InputMessageModel;
 
