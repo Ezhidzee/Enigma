@@ -12,6 +12,7 @@ import su.ezhidze.exception.AuthenticationFailException;
 import su.ezhidze.exception.DuplicateEntryException;
 import su.ezhidze.exception.RecordNotFoundException;
 import su.ezhidze.model.ChatModel;
+import su.ezhidze.model.ImageModel;
 import su.ezhidze.model.UserRegistrationModel;
 import su.ezhidze.model.UserResponseModel;
 import su.ezhidze.repository.UserRepository;
@@ -123,9 +124,9 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
     }
 
-    public User setImage(Integer id, String image) {
+    public User setImage(Integer id, ImageModel image) {
         User user = getUserById(id);
-        user.setImage(image);
+        user.setImage(image.getImage());
         return userRepository.save(user);
     }
 }

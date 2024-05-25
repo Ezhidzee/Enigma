@@ -137,7 +137,7 @@ public class MainController {
     }
 
     @PatchMapping(path = "/setImage")
-    public ResponseEntity setImage(@RequestParam Integer id, @RequestParam String image) {
+    public ResponseEntity setImage(@RequestParam Integer id, @RequestBody ImageModel image) {
         try {
             return ResponseEntity.ok(new UserResponseModel(userService.setImage(id, image)));
         } catch (RecordNotFoundException e) {
