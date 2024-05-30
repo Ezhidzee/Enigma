@@ -31,4 +31,11 @@ public class UserRegistrationModel {
     @Pattern(regexp = "(?=\\S+$).+", message = "No whitespace allowed in the entire password")
     @Pattern(regexp = ".{7,}.+", message = "password should contain at least 8 characters")
     private String password;
+
+    public UserRegistrationModel(String nickname, String phoneNumber, String image, String password) {
+        this.nickname = nickname;
+        this.phoneNumber = phoneNumber;
+        this.image = image;
+        this.password = password;
+    }
 }

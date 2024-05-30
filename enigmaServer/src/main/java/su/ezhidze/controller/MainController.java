@@ -40,7 +40,7 @@ public class MainController {
     }
 
     @PostMapping(path = "/registration")
-    public ResponseEntity addNewUser(@RequestBody UserRegistrationModel userRegistrationModel) {
+    public ResponseEntity registration(@RequestBody UserRegistrationModel userRegistrationModel) {
         try {
             return ResponseEntity.ok(userService.addNewUser(userRegistrationModel));
         } catch (DuplicateEntryException | BadArgumentException e) {

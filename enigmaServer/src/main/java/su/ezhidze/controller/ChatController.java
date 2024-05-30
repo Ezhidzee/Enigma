@@ -52,7 +52,7 @@ public class ChatController {
     }
 
     @PostMapping(path = "/addChat")
-    public ResponseEntity addNewCinema() {
+    public ResponseEntity addNewChat() {
         try {
             return ResponseEntity.ok(chatService.addNewChat());
         } catch (Exception e) {

@@ -76,7 +76,7 @@ public class UserService implements UserDetailsService {
             if (userRepository.findByNickname((String) fields.get("nickname")).isPresent()) {
                 throw new DuplicateEntryException("This nickname is already associated with an account.");
             }
-            user.setNickname((String) fields.get("email"));
+            user.setNickname((String) fields.get("nickname"));
         }
         if (fields.get("phoneNumber") != null) {
             if (userRepository.findByPhoneNumber((String) fields.get("phoneNumber")).isPresent()) {
